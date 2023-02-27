@@ -14,11 +14,19 @@ build website:
 
 test website:
   stage: test
-  iamge: alpine
+  iamge: node:16-alpine
   script:
     - test -f build/index.html
+    - yarn global add serve
+    - apk add curl # apk = alpine package manager
+    - serve -s build & # if we add & at the end of a command ,
+    # the process will run in the background like this one
+    # which actually runs a website
+    - sleep 10 # sleep was added to give time to start the server
+    # after 10 sec the following command will run
+    - curl http://localhost:3000 | grep "something inside the file"
 
-unite test:
+.unite test: # if we want to disable a job we may put ' . ' infront of the job
   stage: test
   image: node:16-alpine
   script:
